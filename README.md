@@ -30,6 +30,12 @@ agentcore configure -e agentcore_app.py
 agentcore dev
 ```
 
+If you see `No such file or directory: 'uv'`, reinstall dependencies in your venv:
+
+```bash
+pip install -r requirements.txt
+```
+
 In another terminal:
 
 ```bash
@@ -49,4 +55,24 @@ When you are done:
 
 ```bash
 agentcore destroy
+```
+
+## Troubleshooting
+
+- `Failed to start development server: [Errno 2] No such file or directory: 'uv'`
+  - `agentcore dev` uses `uv` internally for Python projects.
+  - Fix:
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+- `RequestsDependencyWarning: urllib3 ... or chardet ... doesn't match a supported version`
+  - This is usually caused by an incompatible `chardet` version.
+  - Fix:
+
+```bash
+source .venv/bin/activate
+pip install "chardet<6"
 ```
