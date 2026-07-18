@@ -1,5 +1,5 @@
-site_name: LangGraph Tutorial
-site_description: A beginner-to-advanced guide to building agents with LangGraph, built around the runnable examples in this repository.
+site_name: Agentic Development Tutorial
+site_description: A beginner-to-advanced guide to agentic concepts, LangGraph, and MCP, built around the runnable examples in this repository.
 docs_dir: docs
 site_dir: site
 
@@ -50,6 +50,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - "0. Agentic Concepts": 00-agentic-concepts.md
   - "1. Getting Started": 01-getting-started.md
   - "2. Core Concepts": 02-core-concepts.md
   - "3. Conditional Routing": 03-conditional-routing.md
@@ -60,3 +61,17 @@ nav:
   - "8. Advanced Patterns": 08-advanced-patterns.md
   - "9. Deployment": 09-deployment.md
   - "10. Best Practices": 10-best-practices.md
+  - "11. Model Context Protocol (MCP)": 11-mcp-agentic-capabilities.md
+  - "12. Real-World Example": 12-real-world-example.md
+  - RAG Knowledge Base:
+      - Overview: RAG_Knowledge_Base_Starter/index.md
+      - "0. Mathematics Foundations": RAG_Knowledge_Base_Starter/Mathematics_Foundations_for_Similarity_Search.md
+      - "1. Embeddings": RAG_Knowledge_Base_Starter/01_Embeddings.md
+      - "2. Why Embedding Models Are Needed": RAG_Knowledge_Base_Starter/02_Why_Embedding_Models_Are_Needed.md
+      - "3. Similarity Search": RAG_Knowledge_Base_Starter/03_Similarity_Search.md
+      - "3b. Similarity Search, In Depth": RAG_Knowledge_Base_Starter/Similarity_Search_Explanation.md
+      - "4. Vector Databases": RAG_Knowledge_Base_Starter/04_Vector_Databases.md
+      - "5. HNSW": RAG_Knowledge_Base_Starter/05_HNSW.md
+      - "6. RAG Architecture": RAG_Knowledge_Base_Starter/06_RAG_Architecture.md
+      - "7. Vector Search: Tools and Technology": RAG_Knowledge_Base_Starter/07_Vector_Search_Tools_and_Technology.md
+      - "8. Interview Questions (100, with Answers)": RAG_Knowledge_Base_Starter/08_Interview_Questions.md

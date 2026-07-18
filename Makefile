@@ -7,6 +7,10 @@ docs-install:
 
 docs: docs-install
 	$(PYTHON) -m mkdocs build --strict
+	$(PYTHON) -m mkdocs serve
+
+docs-build: docs-install
+	$(PYTHON) -m mkdocs build --strict
 
 docs-serve: docs-install
 	$(PYTHON) -m mkdocs serve

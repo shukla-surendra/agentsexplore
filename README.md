@@ -97,12 +97,13 @@ agentcore destroy
 
 ## Documentation
 
-A full beginner-to-advanced LangGraph tutorial lives in [`docs/`](docs/index.md), built around the examples
-in this repo. Build and preview it locally with:
+A full beginner-to-advanced agentic development tutorial lives in [`docs/`](docs/index.md), built around
+the examples in this repo — covering agentic concepts, LangGraph, the Model Context Protocol (MCP), and a
+real-world deployable example. Build and preview it locally with:
 
 ```bash
-make docs-serve   # live-reloading preview at http://127.0.0.1:8000
-make docs         # static build into site/
+make docs         # strict build, then serves at http://127.0.0.1:8000 (live-reloading)
+make docs-build    # strict static build into site/ only, no server
 ```
 
 ## Troubleshooting

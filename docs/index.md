@@ -1,11 +1,14 @@
-# LangGraph Tutorial: Beginner to Advanced
+# Agentic Development Tutorial: Beginner to Advanced
 
-Welcome! This is a self-contained tutorial for [LangGraph](https://langchain-ai.github.io/langgraph/), the
-graph-based framework for building stateful, multi-step LLM applications and agents.
+Welcome! This is a self-contained, beginner-to-advanced tutorial on building AI agents — covering the
+underlying agentic concepts, [LangGraph](https://langchain-ai.github.io/langgraph/) (the graph-based
+framework for building stateful, multi-step LLM applications), the
+[Model Context Protocol](https://modelcontextprotocol.io) (MCP) for exposing tools across agents, and how it
+all comes together in a real, deployable example.
 
 It is written against the code in this repository — in particular `langgraph_agents_demo.py`
-(planner → researcher/calculator → writer) — so every concept has a working example you can actually run
-with `python langgraph_agents_demo.py "..."`.
+(planner → researcher/calculator → writer), `personal_assistant_demo.py` (a hand-rolled agent loop), and
+`tasks_mcp_server.py` (an MCP server) — so every concept has a working example you can actually run.
 
 ## Who this is for
 
@@ -19,6 +22,7 @@ example.
 
 | # | Chapter | You'll learn |
 |---|---------|---------------|
+| 0 | [Agentic Concepts](00-agentic-concepts.md) | What makes something an "agent," the core loop, building blocks, guardrails — framework-agnostic |
 | 1 | [Getting Started](01-getting-started.md) | Install LangGraph, build and run your first graph |
 | 2 | [Core Concepts](02-core-concepts.md) | `State`, nodes, edges, reducers, `StateGraph`, compiling |
 | 3 | [Conditional Routing](03-conditional-routing.md) | Branching logic, routers, loops — the "planner" pattern |
@@ -29,6 +33,8 @@ example.
 | 8 | [Advanced Patterns](08-advanced-patterns.md) | Fan-out/fan-in, custom reducers, retries, error handling |
 | 9 | [Deployment](09-deployment.md) | Packaging a graph as a service, and deploying it with Bedrock AgentCore |
 | 10 | [Best Practices](10-best-practices.md) | Testing, debugging, project structure, LangGraph Studio |
+| 11 | [Model Context Protocol (MCP)](11-mcp-agentic-capabilities.md) | What MCP is, this repo's MCP server, consuming MCP tools from a LangGraph agent |
+| 12 | [Real-World Example](12-real-world-example.md) | Combining agentic concepts, LangGraph, and MCP into one deployable personal assistant |
 
 ## Prerequisites for running the examples
 
@@ -53,4 +59,5 @@ LangGraph models an application as a **graph**:
 Compiling the graph produces a runnable object with the same interface as any LangChain `Runnable`:
 `.invoke()`, `.stream()`, `.ainvoke()`, `.astream()`.
 
-Ready? Start with [Chapter 1 — Getting Started](01-getting-started.md).
+Ready? Start with [Chapter 0 — Agentic Concepts](00-agentic-concepts.md), or jump straight to
+[Chapter 1 — Getting Started](01-getting-started.md) if you just want to write LangGraph code.

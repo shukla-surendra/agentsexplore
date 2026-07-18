@@ -97,5 +97,8 @@ Keeping node logic free of LangGraph imports where possible (plain functions tha
   deterministic version.
 - Add a `RetryPolicy` (Chapter 8) around any node that calls an external API.
 
-That's the full tour — from a two-line `StateGraph` in Chapter 1 to a deployed, multi-agent, persistent
-graph. Go build something.
+That's the full tour of LangGraph itself — from a two-line `StateGraph` in Chapter 1 to a deployed,
+multi-agent, persistent graph. Two chapters remain: exposing tools over a standard protocol, and combining
+everything into one deployable system.
+
+Next: [Chapter 11 — Model Context Protocol (MCP)](11-mcp-agentic-capabilities.md).
