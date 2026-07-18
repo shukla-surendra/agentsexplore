@@ -25,3 +25,4 @@ build/
 *.tar.gz
 *.zip
 *.egg-info/
+site/
