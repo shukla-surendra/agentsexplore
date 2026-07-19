@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: up down logs install ingest ask psql clean
+.PHONY: up down logs install ingest ask psql clean install-notebook lab lab-ollama
 
 up:
 	docker compose up -d
@@ -28,3 +28,13 @@ psql:
 
 clean:
 	docker compose down -v
+
+install-notebook:
+	$(PYTHON) -m pip install -r requirements-notebook.txt
+	$(PYTHON) -m ipykernel install --user --name=rag-pgvector-local --display-name "RAG pgvector (local)"
+
+lab:
+	jupyter lab --port=8890 explore.ipynb
+
+lab-ollama:
+	jupyter lab --port=8890 explore_ollama.ipynb

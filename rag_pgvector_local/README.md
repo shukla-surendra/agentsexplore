@@ -37,6 +37,9 @@ flowchart LR
 | `search.py` | Standalone similarity search (retrieval only, no LLM) |
 | `rag.py` | Full pipeline: retrieve from pgvector, generate an answer with Ollama |
 | `sample_docs/` | A small demo corpus about vector search itself |
+| `explore.ipynb` | Interactive notebook for exploring embeddings/retrieval by hand (optional, see below) |
+| `explore_ollama.ipynb` | Interactive notebook for the Ollama API itself — models, generate/chat, sampling options (optional, see below) |
+| `requirements-notebook.txt` | Jupyter Lab + notebook-only deps (not needed for the CLI scripts) |
 
 ## Setup
 
@@ -103,6 +106,26 @@ make ask Q="What is a vector database?"
 make down      # stop pgvector (keeps data)
 make clean     # stop pgvector and delete the volume
 ```
+
+## Exploring interactively (Jupyter Lab)
+
+Optional, on top of the base setup above — for poking at embeddings, retrieval, and the pgvector index by
+hand rather than through the CLI scripts.
+
+```bash
+make install-notebook   # jupyterlab, pandas, matplotlib, scikit-learn + registers a project-scoped kernel
+make lab                 # opens explore.ipynb at http://localhost:8890
+```
+
+(Port `8890`, not the Jupyter default `8888` — chosen to avoid colliding with other local notebook servers;
+override with `jupyter lab --port=<N> explore.ipynb` if `8890` is also taken.) Select the **RAG pgvector
+(local)** kernel if it isn't already active — it points at this project's `.venv`, not your system Python.
+
+`explore.ipynb` covers: embedding a few sentences and inspecting pairwise similarity, running
+`search.search()` interactively, comparing two different Ollama embedding models' retrieval rankings
+side by side, raw SQL against the `documents` table (including confirming the HNSW index is actually used
+via `EXPLAIN`), a 2D PCA plot of the corpus, and a chunking playground for trying different
+`chunk_size`/`overlap` values.
 
 ## Configuration
 

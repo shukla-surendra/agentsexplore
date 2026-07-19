@@ -26,3 +26,4 @@ build/
 *.zip
 *.egg-info/
 site/
+.ipynb_checkpoints/
