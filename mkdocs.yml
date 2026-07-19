@@ -3,6 +3,13 @@ site_description: A beginner-to-advanced guide to agentic concepts, LangGraph, a
 docs_dir: docs
 site_dir: site
 
+validation:
+  links:
+    # Some pages intentionally link out to runnable code alongside docs_dir (e.g.
+    # similarity_search/*.py) — those resolve fine on GitHub but aren't part of the built site,
+    # so don't fail --strict builds over them.
+    not_found: info
+
 theme:
   name: material
   palette:
@@ -50,19 +57,20 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - "0. Agentic Concepts": 00-agentic-concepts.md
-  - "1. Getting Started": 01-getting-started.md
-  - "2. Core Concepts": 02-core-concepts.md
-  - "3. Conditional Routing": 03-conditional-routing.md
-  - "4. Tools & Agents": 04-tools-and-agents.md
-  - "5. Memory & Persistence": 05-memory-and-persistence.md
-  - "6. Multi-Agent Systems": 06-multi-agent-systems.md
-  - "7. Streaming": 07-streaming.md
-  - "8. Advanced Patterns": 08-advanced-patterns.md
-  - "9. Deployment": 09-deployment.md
-  - "10. Best Practices": 10-best-practices.md
-  - "11. Model Context Protocol (MCP)": 11-mcp-agentic-capabilities.md
-  - "12. Real-World Example": 12-real-world-example.md
+  - Agentic Concepts:
+      - "0. Agentic Concepts": Agentic_Concepts/00-agentic-concepts.md
+      - "1. Getting Started": Agentic_Concepts/01-getting-started.md
+      - "2. Core Concepts": Agentic_Concepts/02-core-concepts.md
+      - "3. Conditional Routing": Agentic_Concepts/03-conditional-routing.md
+      - "4. Tools & Agents": Agentic_Concepts/04-tools-and-agents.md
+      - "5. Memory & Persistence": Agentic_Concepts/05-memory-and-persistence.md
+      - "6. Multi-Agent Systems": Agentic_Concepts/06-multi-agent-systems.md
+      - "7. Streaming": Agentic_Concepts/07-streaming.md
+      - "8. Advanced Patterns": Agentic_Concepts/08-advanced-patterns.md
+      - "9. Deployment": Agentic_Concepts/09-deployment.md
+      - "10. Best Practices": Agentic_Concepts/10-best-practices.md
+      - "11. Model Context Protocol (MCP)": Agentic_Concepts/11-mcp-agentic-capabilities.md
+      - "12. Real-World Example": Agentic_Concepts/12-real-world-example.md
   - RAG Knowledge Base:
       - Overview: RAG_Knowledge_Base_Starter/index.md
       - "0. Mathematics Foundations": RAG_Knowledge_Base_Starter/Mathematics_Foundations_for_Similarity_Search.md
@@ -75,3 +83,15 @@ nav:
       - "6. RAG Architecture": RAG_Knowledge_Base_Starter/06_RAG_Architecture.md
       - "7. Vector Search: Tools and Technology": RAG_Knowledge_Base_Starter/07_Vector_Search_Tools_and_Technology.md
       - "8. Interview Questions (100, with Answers)": RAG_Knowledge_Base_Starter/08_Interview_Questions.md
+  - Similarity Search Methods:
+      - Overview: Similarity_Search_Methods/index.md
+      - "1. Vector-Based Methods for Similarity Search": Similarity_Search_Methods/01_Vector_Based_Methods_for_Similarity_Search.md
+      - "2. Tree-Based Methods": Similarity_Search_Methods/02_Tree_Based_Methods.md
+      - "3. Hashing-Based Methods": Similarity_Search_Methods/03_Hashing_Based_Methods.md
+      - "4. Graph-Based Methods": Similarity_Search_Methods/04_Graph_Based_Methods.md
+      - "5. Quantization and Compression": Similarity_Search_Methods/05_Quantization_and_Compression.md
+      - "6. Choosing an Algorithm and Benchmarking It": Similarity_Search_Methods/06_Choosing_and_Benchmarking.md
+      - "7. Tools, Libraries, and Interview Questions": Similarity_Search_Methods/07_Tools_Libraries_and_Interview_Questions.md
+      - "8. Databricks Vector Search": Similarity_Search_Methods/08_Databricks_Vector_Search.md
+      - "9. Additional Methods, Re-Ranking, and Taxonomy": Similarity_Search_Methods/09_Additional_Methods_Reranking_and_Taxonomy.md
+      - "10. FAISS Index Types": Similarity_Search_Methods/10_FAISS_Index_Types.md
