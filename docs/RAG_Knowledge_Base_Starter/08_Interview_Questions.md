@@ -1,6 +1,6 @@
 # Interview Questions: Vector Search, Similarity Search, and RAG
 
-100 senior/staff-level interview questions on embeddings, similarity metrics, ANN algorithms, vector
+101 senior/staff-level interview questions on embeddings, similarity metrics, ANN algorithms, vector
 database system design, and RAG architecture/evaluation — each with an answer, and example code where code
 clarifies the answer better than prose alone. Grouped by topic, same order as the
 [question-only version](07_Vector_Search_Tools_and_Technology.md) referenced from the
@@ -839,6 +839,38 @@ insufficient, or handle your specific document structure) can meaningfully impro
 prompt-engineering brittleness, but adds real maintenance cost: every base-model upgrade potentially
 requires re-fine-tuning, and you lose the ability to freely swap in a newer off-the-shelf model without
 redoing that investment.
+
+**101. Late chunking — how does embedding a full document before splitting change what a chunk vector
+captures, and where does the technique break down?**
+Every strategy in Q57 and Q61 embeds *after* splitting: each chunk is a separate, independent forward pass
+through the embedding model with zero visibility into the rest of the document — exactly the blind spot
+contextual retrieval (Q61) patches by manually prepending an LLM-written summary before embedding. Late
+chunking inverts the order instead of patching around it: run the *entire* document through a long-context
+embedding model's token encoder in one pass, producing one contextualized token embedding per token (each
+one shaped by self-attention over the whole document), and only *then* apply chunk boundaries by
+mean-pooling the relevant span of token embeddings into each chunk's final vector.
+
+```python
+def late_chunk(text: str, chunk_token_spans: list[tuple[int, int]], embed_tokens_fn) -> list[list[float]]:
+    token_embeddings = embed_tokens_fn(text)  # one forward pass over the whole document
+    return [
+        token_embeddings[start:end].mean(axis=0)
+        for start, end in chunk_token_spans  # boundaries still chosen by any splitter, e.g. Q57
+    ]
+```
+
+Because pooling happens *after* a full-document attention pass, chunk *N*'s vector already reflects
+terminology and pronouns resolved elsewhere in the document (what "it" or "the company" refers to)
+without an LLM ever writing an explicit summary — cheaper per document than contextual retrieval (one
+embedding pass vs. one LLM call per chunk) once a suitable model is available. It breaks down in two
+concrete ways: the whole document must fit inside the embedding model's context window in a single pass,
+which bounds the technique to documents at or under that limit (an LLM's summary in Q61 has no such
+ceiling); and it requires an embedding model that exposes *per-token* output before pooling — most hosted
+embedding APIs return only a single already-pooled vector per input, so late chunking is currently mostly
+a self-hosted/open-weight-model technique, not something you can bolt onto an arbitrary embedding API.
+
+See [Chunking Strategies, In Depth](Chunking_Strategies_In_Depth.md) for this and every other chunking
+strategy referenced across this section, with full code for each.
 
 Next: back to the [RAG Knowledge Base overview](index.md), or
 [Vector Search: Tools and Technology](07_Vector_Search_Tools_and_Technology.md) for the concrete tooling

@@ -16,8 +16,9 @@ or jump straight to whichever concept you need.
 | 4 | [Vector Databases](04_Vector_Databases.md) | What a vector database is responsible for, and common options |
 | 5 | [HNSW](05_HNSW.md) | The graph-based ANN algorithm most vector databases use under the hood |
 | 6 | [RAG Architecture](06_RAG_Architecture.md) | How chunking, embedding, retrieval, and generation fit together end to end |
+| — | [Chunking Strategies, In Depth](Chunking_Strategies_In_Depth.md) | Fixed-size, recursive, semantic, structure-aware, parent-document, contextual, and late chunking — trade-offs, code, and how to choose a chunk size empirically |
 | 7 | [Vector Search: Tools and Technology](07_Vector_Search_Tools_and_Technology.md) | A reference map of embedding models, ANN algorithms, vector databases, and orchestration layers |
-| 8 | [Interview Questions (100, with Answers)](08_Interview_Questions.md) | Senior/staff-level Q&A on embeddings, similarity metrics, ANN algorithms, vector DB design, and RAG — with example code |
+| 8 | [Interview Questions (101, with Answers)](08_Interview_Questions.md) | Senior/staff-level Q&A on embeddings, similarity metrics, ANN algorithms, vector DB design, and RAG — with example code |
 
 ## How this relates to the agent tutorial
 
