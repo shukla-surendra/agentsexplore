@@ -71,6 +71,7 @@ nav:
       - "10. Best Practices": Agentic_Concepts/10-best-practices.md
       - "11. Model Context Protocol (MCP)": Agentic_Concepts/11-mcp-agentic-capabilities.md
       - "12. Real-World Example": Agentic_Concepts/12-real-world-example.md
+      - "Appendix: Trusted Tools Landscape": Agentic_Concepts/13-trusted-tools-landscape.md
   - RAG Knowledge Base:
       - Overview: RAG_Knowledge_Base_Starter/index.md
       - "0. Mathematics Foundations": RAG_Knowledge_Base_Starter/Mathematics_Foundations_for_Similarity_Search.md
