@@ -72,6 +72,9 @@ nav:
       - "11. Model Context Protocol (MCP)": Agentic_Concepts/11-mcp-agentic-capabilities.md
       - "12. Real-World Example": Agentic_Concepts/12-real-world-example.md
       - "Appendix: Trusted Tools Landscape": Agentic_Concepts/13-trusted-tools-landscape.md
+      - "Appendix: Autonomy Levels and Approval Patterns": Agentic_Concepts/14-autonomy-and-approval-patterns.md
+      - "Appendix: JSON-RPC 2.0, Plain English": Agentic_Concepts/15-jsonrpc-explained.md
+      - "Appendix: MCP Protocol Recommendations, Plain English": Agentic_Concepts/16-mcp-protocol-recommendations.md
   - RAG Knowledge Base:
       - Overview: RAG_Knowledge_Base_Starter/index.md
       - "0. Mathematics Foundations": RAG_Knowledge_Base_Starter/Mathematics_Foundations_for_Similarity_Search.md
