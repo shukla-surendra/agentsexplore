@@ -4,7 +4,7 @@ A from-scratch implementation of the [Model Context Protocol](https://modelconte
 no `mcp` package, no framework, just Python's standard library (`json`, `sys`, `subprocess`)
 implementing the protocol's actual mechanics by hand. The goal isn't to build something
 production-ready (use the real SDK for that, see [Chapter 11](../docs/Agentic_Concepts/11-mcp-agentic-capabilities.md)
-and `../tasks_mcp_server.py`) — it's to understand exactly what MCP *is*, at the level of the
+and `../bedrock_agentcore_demo/tasks_mcp_server.py`) — it's to understand exactly what MCP *is*, at the level of the
 bytes going over the wire, by building the smallest version that's still real.
 
 ## What MCP actually is
@@ -20,7 +20,7 @@ Strip away the framing and MCP is two things stacked together:
    HTTP for network use) for actually moving those messages between processes.
 
 That's the whole idea: instead of every AI application inventing its own bespoke way to expose
-tools to a model, MCP standardizes the wire format and the method names, so one server (`../tasks_mcp_server.py`,
+tools to a model, MCP standardizes the wire format and the method names, so one server (`../bedrock_agentcore_demo/tasks_mcp_server.py`,
 or any of the hundreds of public MCP servers) works with any compliant client (this project's
 `mcp_client.py`, Claude Desktop, an IDE, LangGraph via `langchain_mcp_adapters`, ...) without either
 side knowing anything about the other's implementation. Everything below is building that idea up
@@ -108,7 +108,7 @@ method to use one):
 `TOOLS` and `RESOURCES` in `mcp_server.py` are plain Python data (name, description, and for tools
 an `inputSchema` written as literal JSON Schema) — worth looking at directly, since that's *all* a
 tool or resource definition actually is on the wire. The real SDK (`FastMCP`, used by
-`../tasks_mcp_server.py`) generates that JSON Schema for you from a function's type hints and
+`../bedrock_agentcore_demo/tasks_mcp_server.py`) generates that JSON Schema for you from a function's type hints and
 docstring; here it's written by hand once, specifically so the shape is visible.
 
 ## Part 5 — Error handling: two kinds, easy to conflate
@@ -137,7 +137,7 @@ triggered on purpose.
 |---|---|
 | `jsonrpc.py` | The four message shapes + standard error codes. No transport, no MCP semantics. |
 | `stdio_transport.py` | Newline-delimited JSON framing over a file-like stream, plus a stderr trace helper. |
-| `task_store.py` | The domain being exposed — a tiny standalone task list (mirrors `../task_store.py`). |
+| `task_store.py` | The domain being exposed — a tiny standalone task list (mirrors `../bedrock_agentcore_demo/task_store.py`). |
 | `mcp_server.py` | The dispatcher: `initialize`, `notifications/initialized`, `tools/list`, `tools/call`, `resources/list`, `resources/read`, and JSON-RPC error handling — the actual protocol implementation. |
 | `mcp_client.py` | Spawns the server, does the handshake, exposes `list_tools()`/`call_tool()`/`list_resources()`/`read_resource()`. |
 | `demo.py` | Exercises everything above against a live server, wire trace and all. |
@@ -163,7 +163,7 @@ one copy of the trace — from the server's side. That's expected, not a bug in 
 make jsonrpc-demo
 make demo
 make demo-quiet
-make compare     # diff this project's server against ../tasks_mcp_server.py
+make compare     # diff this project's server against ../bedrock_agentcore_demo/tasks_mcp_server.py
 make clean
 ```
 
@@ -216,7 +216,7 @@ looks like as bytes:
 
 ## Compared to the real SDK
 
-`../tasks_mcp_server.py` exposes the identical three tools using `FastMCP` in 24 lines. Run
+`../bedrock_agentcore_demo/tasks_mcp_server.py` exposes the identical three tools using `FastMCP` in 24 lines. Run
 `make compare` to see the diff directly. What the ~350 lines in this project spell out by hand is
 exactly what those 24 lines are doing for you:
 
@@ -230,7 +230,7 @@ exactly what those 24 lines are doing for you:
 | No session/capability negotiation edge cases handled | Full spec compliance, version negotiation, capability checks |
 
 Neither version is "wrong" — this repo already makes that same point about hand-rolled vs.
-framework code in `../personal_assistant_demo.py` vs. LangGraph's `create_react_agent`. Use the
+framework code in `../bedrock_agentcore_demo/personal_assistant_demo.py` vs. LangGraph's `create_react_agent`. Use the
 real SDK for anything you'll actually run; build the from-scratch version (once) to know what it's
 doing.
 

@@ -1,5 +1,5 @@
-"""A tiny standalone task store, mirroring ../task_store.py's shape so the tool set here matches
-../tasks_mcp_server.py's exactly (list_tasks, add_task, complete_task) -- same tools, same
+"""A tiny standalone task store, mirroring ../bedrock_agentcore_demo/task_store.py's shape so the tool set here matches
+../bedrock_agentcore_demo/tasks_mcp_server.py's exactly (list_tasks, add_task, complete_task) -- same tools, same
 behavior, different protocol implementation underneath. This copy is deliberately independent
 (its own tasks.json) so this project stays self-contained like every other project in this repo.
 """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """A from-scratch MCP server: no `mcp` package, just jsonrpc.py + stdio_transport.py + the
 dispatch loop below. It speaks the same tools (mcp_list_tasks, mcp_add_task, mcp_complete_task)
-as ../tasks_mcp_server.py, so you can compare this file to that one directly to see exactly what
+as ../bedrock_agentcore_demo/tasks_mcp_server.py, so you can compare this file to that one directly to see exactly what
 the real SDK (FastMCP) is doing for you: JSON Schema generation from type hints, transport
 abstraction (stdio here, but also Streamable HTTP), and error-handling boilerplate.
 
@@ -13,12 +13,19 @@ ever touch stdout.
 Run it directly for a syntax/import sanity check only:
     python mcp_server.py < /dev/null
 (it will read EOF from /dev/null immediately and exit -- see main() below.)
+
+Background mode (`--pipe-in`/`--pipe-out`): the two arguments name a pair of named pipes (FIFOs,
+see `make server-bg`) to use instead of stdin/stdout. dispatch() and the read/write loop below
+don't change at all -- they already operate on generic streams, so a FIFO pair is just as valid a
+transport as a subprocess's piped stdin/stdout. This is what makes it possible to start the server
+once, in the background, and have a separate process (e.g. a Jupyter kernel) attach to it later
+instead of spawning a fresh server per client, which is all mcp_client.py's MCPClient(...) does.
 """
 
 from __future__ import annotations
 
 import sys
-from typing import Any
+from typing import Any, TextIO
 
 import jsonrpc
 import task_store
@@ -29,7 +36,7 @@ SERVER_INFO = {"name": "mcp-from-scratch-tasks", "version": "0.1.0"}
 
 # --- tool definitions ---------------------------------------------------------------------------
 #
-# In the real SDK (FastMCP, used by ../tasks_mcp_server.py), this JSON Schema is generated for you
+# In the real SDK (FastMCP, used by ../bedrock_agentcore_demo/tasks_mcp_server.py), this JSON Schema is generated for you
 # from a function's type hints and docstring. Here we write it by hand, which is exactly why it's
 # worth writing by hand once: it makes concrete what "inputSchema" actually is -- plain JSON
 # Schema, the same format used by REST API specs and form validators, nothing MCP-specific.
@@ -170,25 +177,46 @@ def dispatch(message: dict[str, Any]) -> dict[str, Any] | None:
     return jsonrpc.make_error(id_, jsonrpc.METHOD_NOT_FOUND, f"Method not found: {method}")
 
 
-def main() -> int:
-    print(f"[server] starting, protocol {PROTOCOL_VERSION}", file=sys.stderr)
+def serve(in_stream: TextIO, out_stream: TextIO) -> int:
+    """The read-dispatch-write loop, independent of what in_stream/out_stream actually are --
+    a subprocess's piped stdin/stdout in normal use, or a pair of named pipes in background mode.
+    """
     while True:
         try:
-            message = read_message(sys.stdin)
+            message = read_message(in_stream)
         except Exception as exc:
             # Malformed JSON on the line -- id is unknown, so per spec we respond with id: null.
-            write_message(sys.stdout, jsonrpc.make_error(None, jsonrpc.PARSE_ERROR, str(exc)))
+            write_message(out_stream, jsonrpc.make_error(None, jsonrpc.PARSE_ERROR, str(exc)))
             continue
 
         if message is None:
-            print("[server] stdin closed, exiting", file=sys.stderr)
+            print("[server] input closed, exiting", file=sys.stderr)
             return 0
 
         trace("<--", message)
         response = dispatch(message)
         if response is not None:
             trace("-->", response)
-            write_message(sys.stdout, response)
+            write_message(out_stream, response)
+
+
+def main() -> int:
+    print(f"[server] starting, protocol {PROTOCOL_VERSION}", file=sys.stderr)
+
+    if "--pipe-in" in sys.argv:
+        pipe_in = sys.argv[sys.argv.index("--pipe-in") + 1]
+        pipe_out = sys.argv[sys.argv.index("--pipe-out") + 1]
+        # Open order matters: it must match MCPClient.connect()'s order exactly. Opening a FIFO
+        # for reading blocks until some process opens the same path for writing (and vice versa),
+        # so if the two sides opened their two pipes in swapped order, both would block forever
+        # waiting on a pipe the other side hasn't gotten to yet. Server reads pipe_in first, then
+        # writes pipe_out -- the client must write pipe_in first, then read pipe_out.
+        print(f"[server] background mode, waiting for a client on {pipe_in}", file=sys.stderr)
+        with open(pipe_in, "r") as in_stream, open(pipe_out, "w", buffering=1) as out_stream:
+            print("[server] client connected", file=sys.stderr)
+            return serve(in_stream, out_stream)
+
+    return serve(sys.stdin, sys.stdout)
 
 
 if __name__ == "__main__":

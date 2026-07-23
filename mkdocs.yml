@@ -70,6 +70,7 @@ nav:
       - "9. Deployment": Agentic_Concepts/09-deployment.md
       - "10. Best Practices": Agentic_Concepts/10-best-practices.md
       - "11. Model Context Protocol (MCP)": Agentic_Concepts/11-mcp-agentic-capabilities.md
+      - "11b. MCP From Scratch (Companion Project)": mcp_from_scratch.md
       - "12. Real-World Example": Agentic_Concepts/12-real-world-example.md
       - "Appendix: Trusted Tools Landscape": Agentic_Concepts/13-trusted-tools-landscape.md
       - "Appendix: Autonomy Levels and Approval Patterns": Agentic_Concepts/14-autonomy-and-approval-patterns.md

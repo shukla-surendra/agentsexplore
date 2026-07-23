@@ -24,7 +24,8 @@ class MCPError(Exception):
 
 
 class MCPClient:
-    """Owns one server subprocess for the lifetime of the client. Not thread-safe, not meant to
+    """Owns one server subprocess for the lifetime of the client (or, via connect(), attaches to
+    an already-running background server instead of spawning one). Not thread-safe, not meant to
     be -- one request is in flight at a time, matching how a synchronous tool-calling agent loop
     actually uses it.
     """
@@ -40,18 +41,41 @@ class MCPClient:
             text=True,
             bufsize=1,  # line-buffered, required so write_message's flush is actually meaningful
         )
+        self._in = self._process.stdin
+        self._out = self._process.stdout
+
+    @classmethod
+    def connect(cls, request_pipe: str, response_pipe: str, verbose: bool = True) -> "MCPClient":
+        """Attach to a server already running in the background (see `make server-bg`) via a pair
+        of named pipes, instead of spawning a new server subprocess. Used from the Jupyter demo so
+        the server's state (tasks.json) and process persist across notebook cells and kernel
+        restarts, rather than resetting every time a fresh MCPClient(...) would spawn one.
+
+        Open order matters and must mirror mcp_server.py's background mode exactly: request_pipe
+        opened for writing first, then response_pipe for reading. Opening a FIFO end blocks until
+        the complementary end (the server's read of request_pipe, its write of response_pipe) is
+        opened by the other process -- swapped order on either side deadlocks both processes
+        waiting on pipes neither has gotten to yet.
+        """
+        self = cls.__new__(cls)
+        self._verbose = verbose
+        self._next_id = 1
+        self._process = None
+        self._in = open(request_pipe, "w", buffering=1)
+        self._out = open(response_pipe, "r")
+        return self
 
     # --- wire-level plumbing ---------------------------------------------------------------
 
     def _send(self, message: dict[str, Any]) -> None:
         if self._verbose:
             trace("-->", message)
-        write_message(self._process.stdin, message)
+        write_message(self._in, message)
 
     def _recv(self) -> dict[str, Any]:
-        message = read_message(self._process.stdout)
+        message = read_message(self._out)
         if message is None:
-            raise ConnectionError("server closed stdout unexpectedly")
+            raise ConnectionError("server closed its output unexpectedly")
         if self._verbose:
             trace("<--", message)
         return message
@@ -107,8 +131,16 @@ class MCPClient:
     # --- lifecycle -----------------------------------------------------------------------------
 
     def close(self) -> None:
-        self._process.stdin.close()
-        self._process.wait(timeout=5)
+        """Closing self._in makes the server see EOF and exit (same shutdown convention either
+        way -- see mcp_server.py's serve()). For a connect()-ed background server this means
+        close() ends that server process too, not just this client's view of it; start a fresh one
+        with `make server-bg` for the next session.
+        """
+        self._in.close()
+        if self._process is not None:
+            self._process.wait(timeout=5)
+        else:
+            self._out.close()
 
     def __enter__(self) -> "MCPClient":
         return self
