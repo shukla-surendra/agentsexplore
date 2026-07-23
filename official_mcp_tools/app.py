@@ -36,13 +36,3 @@ def word_count(text: str) -> int:
 
 if __name__ == "__main__":
     mcp.run()
-
-#1. Run the server directly
-#python app.py
-
-#This starts the MCP server (by default over stdio, which is what clients like Claude Desktop or Cursor expect).
-
-#2. Run it with the MCP development tools (recommended)
-#mcp dev app.py
-
-#This launches the server together with the MCP Inspector so you can test your tools interactively.
