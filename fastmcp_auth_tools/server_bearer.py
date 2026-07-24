@@ -6,8 +6,8 @@ from tools import register_tools
 # Demo tokens only — StaticTokenVerifier stores tokens in plain text and is
 # not safe for production use.
 TOKENS = {
-    "demo-read-token": {"client_id": "demo-client", "scopes": ["tools:read"]},
-    "demo-admin-token": {"client_id": "admin-client", "scopes": ["tools:read", "tools:write"]},
+    "demoxxxxreadxxxxtoken": {"client_id": "demo-client", "scopes": ["tools:read"]},
+    "demoxxxxadminxxxxtoken": {"client_id": "admin-client", "scopes": ["tools:read", "tools:write"]},
 }
 
 auth = StaticTokenVerifier(tokens=TOKENS, required_scopes=["tools:read"])
